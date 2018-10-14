@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  background: black;
+  color: white;
+  background-attachment: fixed;
+}
+
+ h1 {
+  text-align: center;
+  padding-top: 1%;
+}
+
+.menu {
+  text-align: center;
+}
+
+.menu h1 {
+  padding: 2%;
+}
+
+p {
+  color: white;
+  text-align: center;
+  padding: .5%;
+}
+
+img {
+  padding: 1%;
+  max-width: 100%;
+  width: 20%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#content {
+  color: white;
+  text-align: center;
+  padding: 2%;
+}
+
+#rate {
+  color: white;
+  text-align: center;
+  padding: 1%;
+}
+
+.breadcrumb {
+  text-align: center;
+}

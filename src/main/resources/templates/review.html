@@ -3,14 +3,15 @@
 
 <head>
   <title>Horror Review</title>
+  <link href="/style.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="review" th:each="review: ${reviews}">
+  <div th:each="review: ${reviews}">
     <h1 th:text="${review.title}"></h1>
-    <span th:text="'(' + ${review.category} + ')'"></span>
+    <p th:text="'(' + ${review.category} + ')'"></p>
     <img th:src="${review.img}" alt="Review Cover" width="600" height="450" />
-  <div class="body">
+  <div id="content">
     <p th:text="${review.content}"></p>
     <p th:text="${review.ranking}"></p>
     </div>
