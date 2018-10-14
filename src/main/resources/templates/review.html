@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <style>
+    body {
+      background-color: lightblue;
+    }
+
+    h1 {
+      color: teal;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    p {
+      font-family: serif;
+      font-size: 25px;
+      text-align: center;
+    }
+
+    a {
+      font-family: sans-serif;
+      font-size: 20px;
+    }
+
+    div {
+      text-align: center;
+    }
+
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    span {
+      font-family: serif;
+      font-style: italic;
+      font-size: 15px;
+      text-align: center;
+    }
+  </style>
+  <title>Shark Review</title>
+</head>
+
+<body>
+  <div th:each="review: ${reviews}">
+    <h1 th:text="${review.title}"></h1>
+    <span th:text="'(' + ${review.category} + ')'"></span>
+    <img th:src="${review.img}" alt="Shark" width="600" height="450" />
+    <p th:text="${review.content}"></p>
+    <p th:text="${review.ranking}"></p>
+  </div>
+  <div>
+    <a href="http://localhost:8080/show-reviews">Back To Home</a>
+  </div>
+</body>
+
+</html>
