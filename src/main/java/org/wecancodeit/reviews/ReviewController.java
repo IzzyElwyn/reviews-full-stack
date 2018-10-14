@@ -15,13 +15,14 @@ public class ReviewController {
 	
 	@RequestMapping("/show-reviews")
 	public String returnAllReviews(Model model) {
-		model.addAttribute("reviews", reviewRepo.returnAll());
+		model.addAttribute("reviews", reviewRepo.findAll());
 		return "reviews";
+
 	}
 	
 	@RequestMapping("/review")
-	public String returnOneReview(@RequestParam(value="id") Long id, Model model) {
-		model.addAttribute("reviews", reviewRepo.returnOne(id));
+	public String returnOneReview(@RequestParam(value="title") String title, Model model) {
+		model.addAttribute("reviews", reviewRepo.findByTitle(title));
 		return "review";
 	}
 

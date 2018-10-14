@@ -1,35 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-  <style>
-    body {
-      background-color: lightblue;
-    }
-
-    h1 {
-      color: teal;
-      text-align: center;
-    }
-
-    a {
-      font-family: sans-serif;
-      font-size: 25px;
-    }
-
-    div {
-      text-align: center;
-    }
-  </style>
-  <title>Shark Reviews</title>
+  <title>Horror Reviews</title>
 </head>
 
 <body>
-  <h1>Shark Reviews</h1>
+  <h1>Horror Reviews</h1>
 
   <div th:each="review : ${reviews}">
 
-    <a th:href="@{/review(id=${review.id})}" th:text="${review.title}"></a>
+     <a th:href="@{/review(title=${review.title})}" th:text="${review.title} + ' (' + ${review.category} + ')'"></a>
 
   </div>
 
