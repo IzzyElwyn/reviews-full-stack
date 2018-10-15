@@ -8,4 +8,8 @@ public interface ReviewRepository extends CrudRepository<Review, Long>{
 
 		List<Review> findByTitle(String title);
 		
+		Review getByTitle(String title);
+		
+		List<Review> findAllByOrderByTitleAsc();
+		
 }

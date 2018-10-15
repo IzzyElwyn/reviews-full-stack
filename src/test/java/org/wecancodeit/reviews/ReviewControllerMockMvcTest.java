@@ -34,7 +34,7 @@ public class ReviewControllerMockMvcTest {
 	private Review secondReview;
 
 	@MockBean
-	private ReviewRepository repository;
+	private ReviewRepository reviewRepo;
 
 	@Test
 	public void shouldComeBackWithStatusOfOK() throws Exception {
@@ -49,24 +49,24 @@ public class ReviewControllerMockMvcTest {
 	@Test
 	public void shouldPutReviewsIntoModel() throws Exception {
 		Collection<Review> allReviews = asList(firstReview, secondReview);
-		when(repository.returnAll()).thenReturn(allReviews);
+		when(reviewRepo.findAll()).thenReturn(allReviews);
 		mvc.perform(get("/show-reviews")).andExpect(model().attribute("reviews", is(allReviews)));
 	}
 
 	@Test
 	public void shouldBeOkForSingleReview() throws Exception {
-		mvc.perform(get("/review?id=1")).andExpect(status().isOk());
+		mvc.perform(get("/review?title=title")).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void shouldRouteToSingleReviewView() throws Exception {
-		mvc.perform(get("/review?id=1")).andExpect(view().name(is("review")));
+		mvc.perform(get("/review?title=title")).andExpect(view().name(is("review")));
 	}
 	
 	@Test
 	public void shouldPutSingleReviewIntoModel() throws Exception {
-		when(repository.returnOne(1)).thenReturn(firstReview);
-		mvc.perform(get("/review?id=1")).andExpect(model().attribute("reviews", is(firstReview)));
+		when(reviewRepo.getByTitle("title")).thenReturn(firstReview);
+		mvc.perform(get("/review?title=title")).andExpect(model().attribute("reviews", is(firstReview)));
 	}
 
 }

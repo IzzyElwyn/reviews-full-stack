@@ -14,9 +14,13 @@ public class Review {
 	public String getTitle() {
 		return title;
 	}
+	
+	public String getSqrImg() {
+		return sqrImg;
+	}
 
-	public String getImg() {
-		return img;
+	public String getRndImg() {
+		return rndImg;
 	}
 
 	public String getCategory() {
@@ -35,7 +39,8 @@ public class Review {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String title;
-	private String img;
+	private String sqrImg;
+	private String rndImg;
 	private String category;
 	@Lob
 	@Column
@@ -44,9 +49,10 @@ public class Review {
 
 	protected Review() {}
 
-	public Review(String title, String img, String category, String content, String ranking) {
+	public Review(String title, String sqrImg, String rndImg, String category, String content, String ranking) {
 		this.title = title;
-		this.img = img;
+		this.sqrImg = sqrImg;
+		this.rndImg = rndImg;
 		this.category = category;
 		this.content = content;
 		this.ranking = ranking;
@@ -55,8 +61,8 @@ public class Review {
 	@Override
 	public String toString() {
 		return String.format(
-				"Review[id=%d, title='%s', img='%s', category='%s', content='%s', ranking='%s']",
-				id, title, img, category, content, ranking);
+				"Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', category='%s', content='%s', ranking='%s']",
+				id, title, sqrImg, rndImg, category, content, ranking);
 	}
 
 }
