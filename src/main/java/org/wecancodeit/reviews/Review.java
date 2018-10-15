@@ -10,6 +10,21 @@ import javax.persistence.Lob;
 @Entity
 public class Review {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long id;
+	private String title;
+	private String sqrImg;
+	private String rndImg;
+	private String category;
+	@Lob
+	@Column
+	private String content;
+	private String ranking;
+	
+	public long getId() {
+		return id;
+	}
 
 	public String getTitle() {
 		return title;
@@ -35,17 +50,6 @@ public class Review {
 		return ranking;
 	}
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	private String title;
-	private String sqrImg;
-	private String rndImg;
-	private String category;
-	@Lob
-	@Column
-	private String content;
-	private String ranking;
 
 	protected Review() {}
 
@@ -64,5 +68,6 @@ public class Review {
 				"Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', category='%s', content='%s', ranking='%s']",
 				id, title, sqrImg, rndImg, category, content, ranking);
 	}
+
 
 }
