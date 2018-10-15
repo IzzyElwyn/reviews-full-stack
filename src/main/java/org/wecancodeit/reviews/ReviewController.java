@@ -17,13 +17,20 @@ public class ReviewController {
 	public String returnAllReviews(Model model) {
 		model.addAttribute("reviews", reviewRepo.findAll());
 		return "reviews";
-
 	}
+
+
+	@RequestMapping("/show-reviews-sorted")
+	public String returnAllReviewsSorted(Model model) {
+		model.addAttribute("reviews", reviewRepo.findAllByOrderByTitleAsc());
+		return "reviews";
+
+		}
 	
 	@RequestMapping("/review")
 	public String returnOneReview(@RequestParam(value="title") String title, Model model) {
-		model.addAttribute("reviews", reviewRepo.findByTitle(title));
+		model.addAttribute("reviews", reviewRepo.getByTitle(title));
 		return "review";
 	}
-
+	
 }
