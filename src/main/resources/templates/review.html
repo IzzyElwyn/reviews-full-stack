@@ -10,7 +10,6 @@
 <body class="review">
   <div th:each="review: ${reviews}">
     <h1 th:text="${review.title}"></h1>
-    <p th:text="'(' + ${review.category} + ')'"></p>
     <img th:src="${review.rndImg}" alt="Review Cover" width="600" height="450" />
   <div id="content">
     <p th:text="${review.content}"></p>

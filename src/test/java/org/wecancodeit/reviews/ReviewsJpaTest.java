@@ -1,9 +1,11 @@
 package org.wecancodeit.reviews;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -24,10 +26,13 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Resource
 	private ReviewRepository reviewRepo;
 	
+	@Resource
+	private CategoryRepository catRepo;
+	
 	
 	@Test
 	public void shouldSaveAndLoadReview() {
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", "stuff"));
+		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff"));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -40,7 +45,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	
 	@Test
 	public void shouldGenerateReviewId() {
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", "stuff"));
+		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff"));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -48,5 +53,53 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		
 		assertThat(reviewId, is(greaterThan(0L)));
 	}
+	
+	@Test
+	public void shouldSaveAndLoadCategory() {
+		Category category = catRepo.save(new Category("category"));
+		long categoryId = category.getId();
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Optional<Category> result = catRepo.findById(categoryId);
+		result.get();
+		assertThat(category.getName(), is("category"));
+	}
+	
+	@Test
+	public void shouldEstablishCategoryToReviewRelationship() {
+		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", "stuff"));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff"));
+		
+		Category category = new Category("ghosts", womanInBlack, haunting);
+		category = catRepo.save(category);
+		long catId = category.getId();
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Optional<Category> result = catRepo.findById(catId);
+		category = result.get();
+		
+		assertThat(category.getReviews(), containsInAnyOrder(womanInBlack, haunting));
+
+	}
+	
+	@Test
+	public void shouldFindCategoriesForReview() {
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff"));
+		
+		Category ghosts = catRepo.save(new Category("ghosts", womanInBlack));
+		Category curses = catRepo.save(new Category("curses", womanInBlack));
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Collection<Category> categoriesForReview = catRepo.findByReviewsContains(womanInBlack);
+		
+		assertThat(categoriesForReview, containsInAnyOrder(ghosts, curses));
+		}
+
 
 }
