@@ -9,14 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-
-
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Review {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String title;
 	private String sqrImg;
@@ -25,10 +24,13 @@ public class Review {
 	@Column
 	private String content;
 	private String ranking;
-	
+
+	@ManyToOne
+	private Medium medium;
+
 	@ManyToMany(mappedBy = "reviews")
-	private Collection<Category> category;
-	
+	private Collection<Tag> tags;
+
 	public long getId() {
 		return id;
 	}
@@ -36,7 +38,7 @@ public class Review {
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public String getSqrImg() {
 		return sqrImg;
 	}
@@ -45,9 +47,6 @@ public class Review {
 		return rndImg;
 	}
 
-	public Collection<Category> getCategory() {
-		return category;
-	}
 
 	public String getContent() {
 		return content;
@@ -57,22 +56,31 @@ public class Review {
 		return ranking;
 	}
 	
+	public Medium getMedium() {
+		return medium;
+	}
+	
+	public Collection<Tag> getTags() {
+		return tags;
+	}
+	
 
-	protected Review() {}
+	public Review() {
+	}
 
-	public Review(String title, String sqrImg, String rndImg, String content, String ranking) {
+	public Review(String title, String sqrImg, String rndImg, String content, String ranking, Medium medium) {
 		this.title = title;
 		this.sqrImg = sqrImg;
 		this.rndImg = rndImg;
 		this.content = content;
 		this.ranking = ranking;
+		this.medium = medium;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format(
-				"Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s']",
-				id, title, sqrImg, rndImg, content, ranking);
+		return String.format("Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s']", id,
+				title, sqrImg, rndImg, content, ranking);
 	}
 
 	@Override
@@ -96,6 +104,5 @@ public class Review {
 			return false;
 		return true;
 	}
-
 
 }

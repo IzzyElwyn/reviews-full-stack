@@ -1,5 +1,7 @@
 package org.wecancodeit.reviews;
 
+import java.util.Optional;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,9 @@ public class ReviewController {
 	
 	@Resource
 	ReviewRepository reviewRepo;
+	
+	@Resource
+	TagRepository tagRepo;
 	
 	@RequestMapping("/show-reviews")
 	public String returnAllReviews(Model model) {
@@ -28,9 +33,29 @@ public class ReviewController {
 		}
 	
 	@RequestMapping("/review")
-	public String returnOneReview(@RequestParam(value="title") String title, Model model) {
-		model.addAttribute("reviews", reviewRepo.getByTitle(title));
+	public String returnOneReview(@RequestParam(value="id") long id, Model model) throws ReviewNotFoundException {
+		Optional<Review> review = reviewRepo.findById(id);
+		
+		if(review.isPresent()) {
+		model.addAttribute("reviews", review.get());
 		return "review";
 	}
-	
+		
+		throw new ReviewNotFoundException();
+	}
+
+	@RequestMapping("/tag")
+	public String returnOneTag(@RequestParam(value="id")long id, Model model) throws TagNotFoundException {
+		Optional<Tag> tag = tagRepo.findById(id);
+		
+		if(tag.isPresent()) {
+			model.addAttribute("tags", tag.get());
+			return "tag";
+		}
+		
+		throw new TagNotFoundException();
+		
+		
+	}
+
 }

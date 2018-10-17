@@ -27,12 +27,17 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	private ReviewRepository reviewRepo;
 	
 	@Resource
-	private CategoryRepository catRepo;
+	private TagRepository tagRepo;
+	
+
+	@Resource
+	private MediumRepository mediumRepo;
 	
 	
 	@Test
 	public void shouldSaveAndLoadReview() {
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff"));
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", medium));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -45,7 +50,8 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	
 	@Test
 	public void shouldGenerateReviewId() {
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff"));
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", medium));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -55,51 +61,85 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	}
 	
 	@Test
-	public void shouldSaveAndLoadCategory() {
-		Category category = catRepo.save(new Category("category"));
-		long categoryId = category.getId();
+	public void shouldSaveAndLoadTag() {
+		Tag tag = tagRepo.save(new Tag("tag"));
+		long tagId = tag.getId();
 		
 		entityManager.flush();
 		entityManager.clear();
 		
-		Optional<Category> result = catRepo.findById(categoryId);
+		Optional<Tag> result = tagRepo.findById(tagId);
 		result.get();
-		assertThat(category.getName(), is("category"));
+		assertThat(tag.getName(), is("tag"));
 	}
 	
 	@Test
-	public void shouldEstablishCategoryToReviewRelationship() {
-		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", "stuff"));
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff"));
+	public void shouldEstablishTagToReviewRelationship() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", "stuff", medium));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
 		
-		Category category = new Category("ghosts", womanInBlack, haunting);
-		category = catRepo.save(category);
-		long catId = category.getId();
+		Tag tag = new Tag("ghosts", womanInBlack, haunting);
+		tag = tagRepo.save(tag);
+		long tagId = tag.getId();
 		
 		entityManager.flush();
 		entityManager.clear();
 		
-		Optional<Category> result = catRepo.findById(catId);
-		category = result.get();
+		Optional<Tag> result = tagRepo.findById(tagId);
+		tag = result.get();
 		
-		assertThat(category.getReviews(), containsInAnyOrder(womanInBlack, haunting));
+		assertThat(tag.getReviews(), containsInAnyOrder(womanInBlack, haunting));
 
 	}
 	
 	@Test
-	public void shouldFindCategoriesForReview() {
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff"));
+	public void shouldFindTagsForReview() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
 		
-		Category ghosts = catRepo.save(new Category("ghosts", womanInBlack));
-		Category curses = catRepo.save(new Category("curses", womanInBlack));
+		Tag ghosts = tagRepo.save(new Tag("ghosts", womanInBlack));
+		Tag curses = tagRepo.save(new Tag("curses", womanInBlack));
 		
 		entityManager.flush();
 		entityManager.clear();
 		
-		Collection<Category> categoriesForReview = catRepo.findByReviewsContains(womanInBlack);
+		Collection<Tag> tagsForReviews = tagRepo.findByReviewsContains(womanInBlack);
 		
-		assertThat(categoriesForReview, containsInAnyOrder(ghosts, curses));
+		assertThat(tagsForReviews, containsInAnyOrder(ghosts, curses));
 		}
 
+	@Test
+	public void shouldSaveAndLoadMedium() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		long mediumId = medium.getId();
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Optional<Medium> result = mediumRepo.findById(mediumId);
+		result.get();
+		assertThat(medium.getType(), is("book"));
+	}
+	
+	@Test
+	public void shouldEstablishMediumToReviewRelationship() {
+		Medium book = new Medium("book");
+		mediumRepo.save(book);
+		long mediumId = book.getId();
+		
+		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", "stuff", book);
+		reviewRepo.save(womanInBlack);
+		Review nos4a2 = new Review("nos4a2", "stuff", "stuff", "stuff", "stuff", book);
+		reviewRepo.save(nos4a2);
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Optional<Medium>result = mediumRepo.findById(mediumId);
+		book = result.get();
+		assertThat(book.getReviews(), containsInAnyOrder(womanInBlack, nos4a2));
+		
+	}
 
 }
