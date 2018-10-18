@@ -79,8 +79,8 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return String.format("Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s']", id,
-				title, sqrImg, rndImg, content, ranking);
+		return String.format("Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s', medium='%s']", id,
+				title, sqrImg, rndImg, content, ranking, medium);
 	}
 
 	@Override
