@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Horror Reviews</title>
+  <link href="/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Creepster" rel="stylesheet">
+</head>
+
+<body class="menu">
+  <h1>Horror Reviews: By Medium</h1>
+
+  <div th:each="medium : ${mediums}">
+
+     <a th:href="@{/medium(id=${medium.id})}" th:text="${medium.type}"></a>
+
+  </div>
+
+</body>
+
+</html>

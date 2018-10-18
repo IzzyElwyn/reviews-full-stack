@@ -30,12 +30,21 @@ public class ReviewControllerTest {
 	
 	@Mock
 	private Tag secondTag;
+	
+	@Mock
+	private Medium firstMedium;
+	
+	@Mock
+	private Medium secondMedium;
 
 	@Mock
 	private ReviewRepository reviewRepo;
 	
 	@Mock
 	private TagRepository tagRepo;
+	
+	@Mock
+	private MediumRepository mediumRepo;
 	
 	@Mock
 	private Model model;
@@ -72,6 +81,34 @@ public class ReviewControllerTest {
 		underTest.returnOneTag(tagId, model);
 		verify(model).addAttribute("tags", firstTag);
 	}
+	
+	@Test
+	public void shouldAddAllTagsToModel() {
+		Collection<Tag> allTags = asList(firstTag, secondTag);
+		when(tagRepo.findAll()).thenReturn(allTags);
+		
+		underTest.returnAllTags(model);
+		verify(model).addAttribute("tags", allTags);
+		
+	}
+	
+	@Test
+	public void shouldAddSingleMediumToModel() throws MediumNotFoundException {
+		long mediumId = 1;
+		when(mediumRepo.findById(mediumId)).thenReturn(Optional.of(firstMedium));
+		
+		underTest.returnOneMedium(mediumId, model);
+		verify(model).addAttribute("mediums", firstMedium);
+	}
+	
+	@Test
+	public void shouldAddAllMediumsToModel() {
+		Collection<Medium> allMediums = asList(firstMedium, secondMedium);
+		when(mediumRepo.findAll()).thenReturn(allMediums);
+		
+		underTest.returnAllMediums(model);
+		verify(model).addAttribute("mediums", allMediums);
+}
 
 
 }

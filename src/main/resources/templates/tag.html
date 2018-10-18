@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <title>Horror Reviews</title>
   <link href="/style.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Creepster" rel="stylesheet">
 </head>
 
-<body class="review">
-  <div th:each="review: ${reviews}">
-    <h1 th:text="${review.title}"></h1>
-    <img th:src="${review.rndImg}" alt="Review Cover" width="600" height="450" />
-  <div id="content">
-    <p th:text="${review.content}"></p>
-    <p th:text="${review.ranking}"></p>
-    </div>
-  </div>
+<body>
+
   <div class="breadcrumb">
     <a href="http://localhost:8080/reviews">Back To Home</a>
   </div>

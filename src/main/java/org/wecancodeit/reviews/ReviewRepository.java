@@ -11,4 +11,5 @@ public interface ReviewRepository extends CrudRepository<Review, Long>{
 	Review getByTitle(String title);
 	
 	List<Review> findAllByOrderByTitleAsc();
+
 }
