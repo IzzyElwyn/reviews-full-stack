@@ -7,11 +7,11 @@
 </head>
 
 <body class="menu">
-  <h1>Horror Reviews</h1>
+  <h1>Horror Reviews: By Tag</h1>
 
-  <div th:each="review : ${reviews}">
+  <div th:each="tag : ${tags}">
 
-     <a th:href="@{/review(id=${review.id})}" th:text="${review.title}"></a>
+     <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
 
   </div>
 

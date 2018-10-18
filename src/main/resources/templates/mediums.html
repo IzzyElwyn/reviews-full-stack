@@ -7,11 +7,11 @@
 </head>
 
 <body class="menu">
-  <h1>Horror Reviews</h1>
+  <h1>Horror Reviews: By Medium</h1>
 
-  <div th:each="review : ${reviews}">
+  <div th:each="medium : ${mediums}">
 
-     <a th:href="@{/review(id=${review.id})}" th:text="${review.title}"></a>
+     <a th:href="@{/medium(id=${medium.id})}" th:text="${medium.type}"></a>
 
   </div>
 
