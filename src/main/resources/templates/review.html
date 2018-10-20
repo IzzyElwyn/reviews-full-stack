@@ -15,6 +15,11 @@
   <div id="content">
     <p th:text="${review.content}"></p>
     <p th:text="${review.ranking}"></p>
+    <section>
+    <a href="http://localhost:8080/tags">tags</a>
+    <div th:each="tag : ${tags}">
+      <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
+    </div>
     </div>
   </div>
   <div class="breadcrumb">
