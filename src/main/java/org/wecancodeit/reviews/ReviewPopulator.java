@@ -90,7 +90,14 @@ public class ReviewPopulator implements CommandLineRunner {
 			log.info(reviews.toString());
 			}
 			log.info("");
-		
+			
+			log.info("Tag found with findByReviewsContains(nos4a2):");
+			log.info("-------------------------------------------"); 
+			for (Tag tags : tagRepo.findByReviewsContains(nos4a2)) {
+			log.info(tags.toString());
+			}
+			log.info("");
+			
 
 	}
 }

@@ -108,6 +108,21 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		
 		assertThat(tagsForReviews, containsInAnyOrder(ghosts, curses));
 		}
+	
+	@Test
+	public void shouldFindReviewsForTag() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "stuff", medium));
+		Tag ghosts = tagRepo.save(new Tag("ghosts", womanInBlack, hohh));
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Collection<Review> reviewsForTag = reviewRepo.findByTagsContains(ghosts);
+		
+		assertThat(reviewsForTag, containsInAnyOrder(womanInBlack, hohh));
+	}
 
 	@Test
 	public void shouldSaveAndLoadMedium() {
@@ -140,6 +155,20 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		book = result.get();
 		assertThat(book.getReviews(), containsInAnyOrder(womanInBlack, nos4a2));
 		
+	}
+	
+	@Test
+	public void shouldFindReviewByMedium() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "stuff", medium));
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Collection<Review> reviewsForMedium = reviewRepo.findAllByMedium(medium);
+		
+		assertThat(reviewsForMedium, containsInAnyOrder(womanInBlack, hohh));
 	}
 
 }

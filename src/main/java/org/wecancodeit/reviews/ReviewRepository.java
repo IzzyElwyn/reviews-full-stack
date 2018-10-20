@@ -1,15 +1,20 @@
 package org.wecancodeit.reviews;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.data.repository.CrudRepository;
 
 public interface ReviewRepository extends CrudRepository<Review, Long>{
 
-	List<Review> findByTitle(String title);
+	Collection<Review> findByTitle(String title);
 	
 	Review getByTitle(String title);
 	
-	List<Review> findAllByOrderByTitleAsc();
+	Collection<Review> findAllByOrderByTitleAsc();
+	
+	Collection<Review> findByTagsContains(Tag tag);
+	
+	Collection<Review> findAllByMedium(Medium medium);
+	
 
 }

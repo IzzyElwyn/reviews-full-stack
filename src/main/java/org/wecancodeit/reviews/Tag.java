@@ -40,6 +40,11 @@ public class Tag {
 		this.name = name;
 		this.reviews = new HashSet<>(Arrays.asList(reviews));
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Tag[id=%d, name='%s']", id, name);
+	}
 
 	@Override
 	public int hashCode() {

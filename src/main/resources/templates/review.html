@@ -11,6 +11,7 @@
   <div th:each="review: ${reviews}">
     <h1 th:text="${review.title}"></h1>
     <img th:src="${review.rndImg}" alt="Review Cover" width="600" height="450" />
+    <a th:href="@{/medium(id=${review.medium.id})}" th:text="${review.medium.type}"></a>
   <div id="content">
     <p th:text="${review.content}"></p>
     <p th:text="${review.ranking}"></p>

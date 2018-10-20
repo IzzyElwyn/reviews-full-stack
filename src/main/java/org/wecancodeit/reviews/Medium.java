@@ -37,6 +37,7 @@ public class Medium {
 	public Medium(String type) {
 		this.type = type;
 	}
+	
 
 	@Override
 	public int hashCode() {

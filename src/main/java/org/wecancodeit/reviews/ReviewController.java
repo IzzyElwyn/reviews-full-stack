@@ -17,7 +17,7 @@ public class ReviewController {
 
 	@Resource
 	TagRepository tagRepo;
-	
+
 	@Resource
 	MediumRepository mediumRepo;
 
@@ -26,6 +26,7 @@ public class ReviewController {
 		model.addAttribute("reviews", reviewRepo.findAll());
 		return "reviews";
 	}
+
 
 	@RequestMapping("/reviews-sorted")
 	public String returnAllReviewsSorted(Model model) {
@@ -52,6 +53,7 @@ public class ReviewController {
 
 		if (tag.isPresent()) {
 			model.addAttribute("tags", tag.get());
+			model.addAttribute("reviews", reviewRepo.findByTagsContains(tag.get()));
 			return "tag";
 		}
 
@@ -65,15 +67,17 @@ public class ReviewController {
 		return "tags";
 
 	}
+
 	@RequestMapping("/medium")
 	public String returnOneMedium(@RequestParam(value = "id") long id, Model model) throws MediumNotFoundException {
 		Optional<Medium> medium = mediumRepo.findById(id);
-		
+
 		if (medium.isPresent()) {
 			model.addAttribute("mediums", medium.get());
+			model.addAttribute("reviews", reviewRepo.findAllByMedium(medium.get()));
 			return "medium";
 		}
-		
+
 		throw new MediumNotFoundException();
 	}
 
@@ -83,5 +87,5 @@ public class ReviewController {
 		return "mediums";
 		
 	}
-
+	
 }
