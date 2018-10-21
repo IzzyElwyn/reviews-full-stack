@@ -16,6 +16,7 @@ public class Tag {
 	@GeneratedValue
 	private long id;
 	private String name;
+	private String description;
 	
 	@ManyToMany
 	private Collection<Review> reviews;
@@ -28,6 +29,9 @@ public class Tag {
 		return name;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
 	public Collection<Review> getReviews() {
 		return reviews;
 	}
@@ -36,15 +40,12 @@ public class Tag {
 		
 	}
 	
-	public Tag (String name, Review...reviews) {
+	public Tag (String name, String description, Review...reviews) {
 		this.name = name;
+		this.description = description; 
 		this.reviews = new HashSet<>(Arrays.asList(reviews));
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("Tag[id=%d, name='%s']", id, name);
-	}
 
 	@Override
 	public int hashCode() {

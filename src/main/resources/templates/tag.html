@@ -7,10 +7,10 @@
 </head>
 
 <body>
-
 <header>
   <div th:each="tag : ${tags}">
-<h1 th:text="${tag.name}"></h1>
+<h1 th:text="${tag.name} + ' horror reviews'"></h1>
+<h6 th:text="${tag.description}"></h6>
 </div>
 </header>
 
