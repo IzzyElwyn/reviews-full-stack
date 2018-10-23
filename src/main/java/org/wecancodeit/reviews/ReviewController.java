@@ -41,6 +41,7 @@ public class ReviewController {
 
 		if (review.isPresent()) {
 			model.addAttribute("reviews", review.get());
+			model.addAttribute("mediums", mediumRepo.findByReviews(review.get()));
 			model.addAttribute("tags", tagRepo.findByReviewsContains(review.get()));
 			return "review";
 		}

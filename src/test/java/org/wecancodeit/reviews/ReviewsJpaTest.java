@@ -170,5 +170,17 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		
 		assertThat(reviewsForMedium, containsInAnyOrder(womanInBlack, hohh));
 	}
+	
+	@Test
+	public void shouldFindMediumByReview() {
+		Medium book = mediumRepo.save(new Medium("book"));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "Stuff", book));
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Medium mediumForReview = mediumRepo.findByReviews(hohh);
+		assertThat(mediumForReview, is(book));
+	}
 
 }

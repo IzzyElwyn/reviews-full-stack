@@ -16,5 +16,4 @@ public interface ReviewRepository extends CrudRepository<Review, Long>{
 	
 	Collection<Review> findAllByMedium(Medium medium);
 	
-
 }

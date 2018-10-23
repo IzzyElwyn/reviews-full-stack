@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <title>Horror Reviews</title>
   <link href="/style.css" rel="stylesheet">
@@ -11,7 +12,7 @@
 
   <div th:each="tag : ${tags}">
 
-     <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
+    <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
 
   </div>
 

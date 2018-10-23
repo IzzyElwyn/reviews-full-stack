@@ -6,7 +6,7 @@
   text-align: center;
 }
 
- h1 {
+h1 {
   text-align: center;
   padding-top: 1%;
   font-family: "Creepster", sans-serif;
@@ -28,6 +28,10 @@ p {
   padding: .5%;
 }
 
+h6 {
+  padding-top: 1%;
+  padding-bottom: 2%;
+}
 img {
   padding: 1%;
   max-width: 100%;
@@ -52,4 +56,5 @@ img {
 
 .breadcrumb {
   text-align: center;
+  padding: 5%;
 }
