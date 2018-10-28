@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class ReviewController {
 
@@ -26,7 +27,6 @@ public class ReviewController {
 		model.addAttribute("reviews", reviewRepo.findAll());
 		return "reviews";
 	}
-
 
 	@RequestMapping("/reviews-sorted")
 	public String returnAllReviewsSorted(Model model) {
@@ -87,7 +87,94 @@ public class ReviewController {
 	public String returnAllMediums(Model model) {
 		model.addAttribute("mediums", mediumRepo.findAll());
 		return "mediums";
-		
+
 	}
-	
+
+	@RequestMapping("/add-review")
+	public String addReview(String reviewTitle, String sqrImg, String rndImg, String reviewContent,
+			String reviewRanking, String mediumType) {
+		Medium medium = mediumRepo.findByType(mediumType);
+
+		if (medium == null) {
+
+			medium = new Medium(mediumType);
+			mediumRepo.save(medium);
+		}
+
+		Review newReview = reviewRepo.getByTitle(reviewTitle);
+
+		if (newReview == null) {
+			newReview = new Review(reviewTitle, sqrImg, rndImg, reviewContent, reviewRanking, medium);
+			reviewRepo.save(newReview);
+		}
+
+		return "redirect:/reviews";
+	}
+
+	@RequestMapping("/delete-review")
+	public String deleteReviewByTitle(String reviewTitle) {
+
+		if (reviewRepo.getByTitle(reviewTitle) != null) {
+			Review deletedReview = reviewRepo.getByTitle(reviewTitle);
+			reviewRepo.delete(deletedReview);
+		}
+
+		return "redirect:/reviews";
+
+	}
+
+	@RequestMapping("/del-review")
+	public String deleteReviewByReviewId(Long reviewId) {
+
+		reviewRepo.deleteById(reviewId);
+
+		return "redirect:/reviews";
+	}
+
+	@RequestMapping("/find-by-tag")
+	public String findReviewsByTags(String tagName, Model model) {
+		Tag tag = tagRepo.findByName(tagName);
+		model.addAttribute("reviews", reviewRepo.findByTagsContains(tag));
+
+		return "/tag";
+	}
+
+	@RequestMapping("/new-tag")
+	public String addTag(String tagName, String tagDescription, String reviewTitle) {
+		tagName = tagName.toLowerCase();
+		Review review = reviewRepo.getByTitle(reviewTitle);
+
+		if (tagRepo.findByName(tagName) == null) {
+			Tag newTag = new Tag(tagName, tagDescription, review);
+			tagRepo.save(newTag);
+		}
+
+		return "/tags";
+
+	}
+
+	@RequestMapping("/add-tag")
+	public String addTagToReview(String tagName, String reviewTitle) {
+		tagName = tagName.toLowerCase();
+
+
+		if (tagRepo.findByName(tagName) != null) {
+			Tag newTag = tagRepo.findByName(tagName);
+			Review reviewTagged = reviewRepo.getByTitle(reviewTitle);
+			newTag.setReviews(reviewTagged);
+			tagRepo.save(newTag);
+
+		} else {
+
+			addTag(tagName, null, reviewTitle);
+
+		}
+		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
+		long reviewId = reviewRedirect.getId();
+
+		return "redirect:/review?id="+reviewId;
+	}
+
+
+
 }

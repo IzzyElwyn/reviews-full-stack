@@ -11,10 +11,58 @@
   <h1>Horror Reviews</h1>
 
   <div th:each="review : ${reviews}">
-
-    <a th:href="@{/review(id=${review.id})}" th:text="${review.title}"></a>
-
+    <li>
+      <a th:href="@{/review(id=${review.id})}" th:text="${review.title}"></a>
+    </li>
   </div>
+
+  <form method="POST">
+    <div>
+      <label>Enter Review Title: </label>
+      <input type="text" name="reviewTitle" />
+    </div>
+
+    <div>
+      <label>Upload rectangular image for main page:</label>
+      <input type="text" name="sqrImg" />
+    </div>
+
+    <div>
+      <label>Upload Round Review Image for main review page:</label>
+      <input type="text" name="rndImg" />
+    </div>
+
+    <div>
+      <label>Enter your review content:</label>
+      <input type="text" name="reviewContent" />
+    </div>
+
+    <div>
+      <label>Enter your rank for the item you're reviewing here</label>
+      <input type="text" name="reviewRanking" />
+    </div>
+
+    <div>
+      <label>Enter the medium of the subject of your review (ex. film, tv show):</label>
+      <input type="text" name="mediumType" />
+    </div>
+
+    <div>
+      <button th:formaction="@{add-review}">add review</button> </div>
+  </form>
+
+<form method="POST">
+<div>
+  <label>Enter Tag Name:</label>
+  <input type="text" name="tagName" />
+</div>
+
+<div>
+  <button th:formaction="@{/find-by-tag}"> find Reviews </button>
+</div>
+
+</form>
+
 
 </body>
 
