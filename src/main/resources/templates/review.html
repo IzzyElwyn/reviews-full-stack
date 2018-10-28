@@ -20,26 +20,8 @@
         <div th:each="tag : ${tags}">
           <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
         </div>
-      <div>
-<form method = "POST">
-  <div>
-  <label> Add Tag to this Review </label>
-  <input type="text" name="tagName" />
-</div>
-<div>
-  <button type="submit" th:value="${review.title}" name="reviewTitle" th:formaction="@{add-tag}">add tag</button>
-</div>
-
-</form>
-</div>
     </div>
-    <form method = "POST">
-      <button type="submit" th:value="${review.id}" name="reviewId" th:formaction="@{del-review}"> delete this review </button>
-    </form>
-
   </div>
-
-
   <div class="breadcrumb">
     <a href="http://localhost:8080/reviews">Back To Home</a>
   </div>

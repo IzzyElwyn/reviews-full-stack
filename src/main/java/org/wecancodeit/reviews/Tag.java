@@ -36,11 +36,6 @@ public class Tag {
 		return reviews;
 	}
 	
-	public void setReviews(Review review) {
-		reviews.add(review);
-		
-	}
-	
 	public Tag () {
 		
 	}
