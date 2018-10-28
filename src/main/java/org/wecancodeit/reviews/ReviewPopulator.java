@@ -51,11 +51,11 @@ public class ReviewPopulator implements CommandLineRunner {
 		reviewRepo.save(thohh);
 		reviewRepo.save(bioshock);
 		
-		Tag ghosts = new Tag("Ghosts", "Stories featuring those haunting spectres we all know and love", wib, lak, thohh);
-		Tag monsters = new Tag("Monsters", "Stories featuring all manner of inhuman beasties", mia);
-		Tag fantasy = new Tag("Fantasy", "Stories featuring elements based in the unexplainable or based in magic", nos4a2, mia, lak);
-		Tag scifi = new Tag("Sci-fi", "Stories featuring science or science-esque logic behind their main elements", bioshock);
-		Tag drama = new Tag("Drama", "Stories rooted in the emotional aspects of the human experience", nos4a2, mia, lak, thohh);
+		Tag ghosts = new Tag("ghosts", "Stories featuring those haunting spectres we all know and love", wib, lak, thohh);
+		Tag monsters = new Tag("monsters", "Stories featuring all manner of inhuman beasties", mia);
+		Tag fantasy = new Tag("fantasy", "Stories featuring elements based in the unexplainable or based in magic", nos4a2, mia, lak);
+		Tag scifi = new Tag("sci-fi", "Stories featuring science or science-esque logic behind their main elements", bioshock);
+		Tag drama = new Tag("drama", "Stories rooted in the emotional aspects of the human experience", nos4a2, mia, lak, thohh);
 		tagRepo.save(ghosts);
 		tagRepo.save(monsters);
 		tagRepo.save(fantasy);
