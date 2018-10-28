@@ -1,5 +1,6 @@
 package org.wecancodeit.reviews;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 public class ReviewController {
@@ -125,6 +125,15 @@ public class ReviewController {
 
 	@RequestMapping("/del-review")
 	public String deleteReviewByReviewId(Long reviewId) {
+		Optional<Review> review = reviewRepo.findById(reviewId);
+		Review reviewToRemove = review.get();
+
+		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
+		if (tagsToUpdate.size() > 0) {
+			for (Tag tag : tagsToUpdate) {
+				tag.deleteReview(reviewToRemove);
+			}
+		}
 
 		reviewRepo.deleteById(reviewId);
 
@@ -157,11 +166,10 @@ public class ReviewController {
 	public String addTagToReview(String tagName, String reviewTitle) {
 		tagName = tagName.toLowerCase();
 
-
 		if (tagRepo.findByName(tagName) != null) {
 			Tag newTag = tagRepo.findByName(tagName);
 			Review reviewTagged = reviewRepo.getByTitle(reviewTitle);
-			newTag.setReviews(reviewTagged);
+			newTag.addReview(reviewTagged);
 			tagRepo.save(newTag);
 
 		} else {
@@ -172,9 +180,7 @@ public class ReviewController {
 		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
 		long reviewId = reviewRedirect.getId();
 
-		return "redirect:/review?id="+reviewId;
+		return "redirect:/review?id=" + reviewId;
 	}
-
-
 
 }
