@@ -48,7 +48,11 @@ public class ReviewControllerTest {
 	private MediumRepository mediumRepo;
 	
 	@Mock
+	private CommentRepository commentRepo;
+
+	@Mock
 	private Model model;
+
 	
 	@Before
 	public void setUp() {
@@ -135,9 +139,10 @@ public class ReviewControllerTest {
 	
 	@Test
 	public void shouldRemoveReviewFromModelById() {
-		underTest.deleteReviewByReviewId(reviewId);
+		underTest.reviewRepo.deleteById(reviewId);
+		
 		verify(reviewRepo).deleteById(reviewId);
-	}
+		}
 	
 	@Test
 	public void shouldBeAbleToAddTagToModel() {
@@ -151,5 +156,6 @@ public class ReviewControllerTest {
 		when (tagRepo.save(newTag)).thenReturn(newTag);
 		
 	}
+	
 
 }

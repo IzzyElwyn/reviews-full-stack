@@ -55,6 +55,9 @@ public class ReviewMockMvcTest {
 
 	@MockBean
 	private MediumRepository mediumRepo;
+	
+	@MockBean
+	private CommentRepository commentRepo;
 
 	@Test
 	public void shouldComeBackWithStatusOfOK() throws Exception {
@@ -138,5 +141,6 @@ public class ReviewMockMvcTest {
 		when(mediumRepo.findById(mediumId)).thenReturn(Optional.of(firstMedium));
 		mvc.perform(get("/medium?id=1")).andExpect(view().name(is("medium")));
 	}
+	
 
 }

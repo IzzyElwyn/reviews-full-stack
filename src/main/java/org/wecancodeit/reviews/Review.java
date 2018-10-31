@@ -1,6 +1,8 @@
 package org.wecancodeit.reviews;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Review {
@@ -27,6 +30,9 @@ public class Review {
 
 	@ManyToOne
 	private Medium medium;
+
+	@OneToMany(mappedBy = "review")
+	private Collection<Comment> comments;
 
 	@ManyToMany(mappedBy = "reviews")
 	private Collection<Tag> tags;
@@ -47,7 +53,6 @@ public class Review {
 		return rndImg;
 	}
 
-
 	public String getContent() {
 		return content;
 	}
@@ -55,31 +60,45 @@ public class Review {
 	public String getRanking() {
 		return ranking;
 	}
-	
+
 	public Medium getMedium() {
 		return medium;
 	}
-	
+
+	public Collection<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComment(Comment comment) {
+		comments.add(comment);
+	}
+
+	public void deleteComment(Comment comment) {
+		comments.remove(comment);
+	}
+
 	public Collection<Tag> getTags() {
 		return tags;
 	}
-	
 
 	public Review() {
 	}
 
-	public Review(String title, String sqrImg, String rndImg, String content, String ranking, Medium medium) {
+	public Review(String title, String sqrImg, String rndImg, String content, String ranking, Medium medium,
+			Comment... comments) {
 		this.title = title;
 		this.sqrImg = sqrImg;
 		this.rndImg = rndImg;
 		this.content = content;
 		this.ranking = ranking;
 		this.medium = medium;
+		this.comments = new HashSet<>(Arrays.asList(comments));
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s', medium='%s']", id,
+		return String.format(
+				"Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s', medium='%s']", id,
 				title, sqrImg, rndImg, content, ranking, medium);
 	}
 

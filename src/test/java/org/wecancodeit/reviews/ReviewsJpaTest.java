@@ -1,6 +1,7 @@
 package org.wecancodeit.reviews;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
@@ -32,6 +33,9 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 
 	@Resource
 	private MediumRepository mediumRepo;
+	
+	@Resource
+	private CommentRepository commentRepo;
 	
 	
 	@Test
@@ -182,5 +186,39 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		Medium mediumForReview = mediumRepo.findByReviews(hohh);
 		assertThat(mediumForReview, is(book));
 	}
+	
+	@Test
+	public void shouldSaveAndLoadComment() {
+		Medium medium = mediumRepo.save(new Medium("book"));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "Stuff", medium));
+		Comment comment = commentRepo.save(new Comment("username", "comment", hohh));
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		
+		Optional<Comment> result = commentRepo.findById(comment.getId());
+		result.get();
+		assertThat(comment.getContent(), is("comment"));
+	}
+	
+	@Test
+	public void shouldEstablishReviewtoCommentRelationship() {
+		Medium book = new Medium("book");
+		mediumRepo.save(book);
+		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", "stuff", book);
+		reviewRepo.save(womanInBlack);
+		Comment comment = commentRepo.save(new Comment("username", "comment", womanInBlack));
+		commentRepo.save(comment);
+
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		Optional<Review>result = reviewRepo.findById(womanInBlack.getId());
+		womanInBlack = result.get();
+		assertThat(womanInBlack.getComments(), contains(comment));
+	}
+	
 
 }

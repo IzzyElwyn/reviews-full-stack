@@ -21,6 +21,9 @@ public class ReviewController {
 
 	@Resource
 	MediumRepository mediumRepo;
+	
+	@Resource
+	CommentRepository commentRepo;
 
 	@RequestMapping("/reviews")
 	public String returnAllReviews(Model model) {
@@ -129,6 +132,7 @@ public class ReviewController {
 		Review reviewToRemove = review.get();
 
 		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
+		
 		if (tagsToUpdate.size() > 0) {
 			for (Tag tag : tagsToUpdate) {
 				tag.deleteReview(reviewToRemove);
@@ -182,5 +186,6 @@ public class ReviewController {
 
 		return "redirect:/review?id=" + reviewId;
 	}
+
 
 }

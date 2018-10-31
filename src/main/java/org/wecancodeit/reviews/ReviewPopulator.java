@@ -23,6 +23,9 @@ public class ReviewPopulator implements CommandLineRunner {
 	
 	@Resource
 	private TagRepository tagRepo;
+	
+	@Resource
+	private CommentRepository commentRepo;
 		
 	@Override
 	public void run(String... args) throws Exception {
@@ -61,6 +64,9 @@ public class ReviewPopulator implements CommandLineRunner {
 		tagRepo.save(fantasy);
 		tagRepo.save(scifi);
 		tagRepo.save(drama);
+		
+		Comment bioshockComment = new Comment("Andrew Ryan", "A man chooses to love this game", bioshock);
+		commentRepo.save(bioshockComment);
 
 			log.info("Reviews found with findAll():");
 			log.info("-------------------------------");

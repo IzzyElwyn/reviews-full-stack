@@ -15,5 +15,7 @@ public interface ReviewRepository extends CrudRepository<Review, Long>{
 	Collection<Review> findByTagsContains(Tag tag);
 
 	Collection<Review> findAllByMedium(Medium medium);
+	
+	Review getById(long reviewId);
 
 }

@@ -33,10 +33,36 @@
 </form>
 </div>
     </div>
-    <form method = "POST">
-      <button type="submit" th:value="${review.id}" name="reviewId" th:formaction="@{del-review}"> delete this review </button>
-    </form>
 
+    <div class="comment-section">
+<form method = "POST">
+  <section>
+    <label>Username: </label>
+    <input type="text" name="username" />
+  </section>
+  <section>
+  <label> Add a comment to this review </label>
+  <input type="text" name="commentContent" />
+</section>
+<section>
+  <input type="hidden" th:value="${reviews.id}" name="reviewId"/>
+</section>
+<section>
+<button th:formaction="@{add-comment}"> submit comment </button>
+</section>
+
+</div>
+
+<div th:each="comment : ${reviews.comments}">
+
+<p><strong th:text="${comment.username}"></p>
+  <p th:text="${comment.content}"></p>
+</div>
+
+
+<form method = "POST">
+  <button type="submit" th:value="${review.id}" name="reviewId" th:formaction="@{del-review}"> delete this review </button>
+</form>
   </div>
 
 
