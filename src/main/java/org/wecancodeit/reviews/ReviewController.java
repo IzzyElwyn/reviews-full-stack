@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -216,11 +218,18 @@ public class ReviewController {
 		return "redirect:/review?id=" + reviewId;
 	}
 	
-	//add tags with AJAX
+
 	@RequestMapping("/all-tags-ajax")
 	public String showAllTags(Model model) {
 		model.addAttribute("tags", tagRepo.findAll());
 		return "tagsAjax";
+	}
+	
+	//Ajax to add tags
+	@RequestMapping(path = "/tags/(tagName)", method = RequestMethod.POST)
+	public String AddTag(@PathVariable String tagName, Model model) {
+		
+		return "";
 	}
 
 
