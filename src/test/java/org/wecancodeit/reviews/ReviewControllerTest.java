@@ -148,12 +148,11 @@ public class ReviewControllerTest {
 	@Test
 	public void shouldBeAbleToAddTagToModel() {
 		String tagName = "Historical";
-		String tagDescription = "Stories that take place in a historical Setting";
 		String reviewTitle = firstReview.getTitle();
 		
-		underTest.addTag(tagName, tagDescription, reviewTitle);
+		underTest.addTag(tagName,reviewTitle);
 		Review ascReview = reviewRepo.getByTitle(reviewTitle);
-		Tag newTag = new Tag(tagName, tagDescription, ascReview);
+		Tag newTag = new Tag(tagName, ascReview);
 		when (tagRepo.save(newTag)).thenReturn(newTag);
 		
 	}

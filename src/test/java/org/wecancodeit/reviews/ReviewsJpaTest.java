@@ -66,7 +66,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	
 	@Test
 	public void shouldSaveAndLoadTag() {
-		Tag tag = tagRepo.save(new Tag("tag", "description"));
+		Tag tag = tagRepo.save(new Tag("tag"));
 		long tagId = tag.getId();
 		
 		entityManager.flush();
@@ -83,7 +83,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", medium));
 		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
 		
-		Tag tag = new Tag("ghosts","spoops", womanInBlack, haunting);
+		Tag tag = new Tag("ghosts", womanInBlack, haunting);
 		tag = tagRepo.save(tag);
 		long tagId = tag.getId();
 		
@@ -102,8 +102,8 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		Medium medium = mediumRepo.save(new Medium("book"));
 		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
 		
-		Tag ghosts = tagRepo.save(new Tag("ghosts", "boo", womanInBlack));
-		Tag curses = tagRepo.save(new Tag("curses", "hard pass", womanInBlack));
+		Tag ghosts = tagRepo.save(new Tag("ghosts", womanInBlack));
+		Tag curses = tagRepo.save(new Tag("curses",  womanInBlack));
 		
 		entityManager.flush();
 		entityManager.clear();
@@ -118,7 +118,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		Medium medium = mediumRepo.save(new Medium("book"));
 		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
 		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", medium));
-		Tag ghosts = tagRepo.save(new Tag("ghosts", "descriptions", womanInBlack, hohh));
+		Tag ghosts = tagRepo.save(new Tag("ghosts", womanInBlack, hohh));
 		
 		entityManager.flush();
 		entityManager.clear();

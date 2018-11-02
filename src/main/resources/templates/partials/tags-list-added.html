@@ -1,0 +1,6 @@
+<h3>Tag added!</h3>
+<h4>Available Tags are now...</h4>
+
+<li th:each="tag : ${tags}">
+  <a th:href="@{/tag{id=${tag.id}}}" th:text="${tag.name}"></a>
+</li>

@@ -23,7 +23,7 @@ public class ReviewController {
 
 	@Resource
 	MediumRepository mediumRepo;
-	
+
 	@Resource
 	CommentRepository commentRepo;
 
@@ -96,8 +96,8 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/add-review")
-	public String addReview(String reviewTitle, String img, String reviewContent,
-			String reviewRanking, String mediumType) {
+	public String addReview(String reviewTitle, String img, String reviewContent, String reviewRanking,
+			String mediumType) {
 		Medium medium = mediumRepo.findByType(mediumType);
 
 		if (medium == null) {
@@ -134,7 +134,7 @@ public class ReviewController {
 		Review reviewToRemove = review.get();
 
 		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
-		
+
 		if (tagsToUpdate.size() > 0) {
 			for (Tag tag : tagsToUpdate) {
 				tag.deleteReview(reviewToRemove);
@@ -155,12 +155,12 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/new-tag")
-	public String addTag(String tagName, String tagDescription, String reviewTitle) {
+	public String addTag(String tagName, String reviewTitle) {
 		tagName = tagName.toLowerCase();
 		Review review = reviewRepo.getByTitle(reviewTitle);
 
 		if (tagRepo.findByName(tagName) == null) {
-			Tag newTag = new Tag(tagName, tagDescription, review);
+			Tag newTag = new Tag(tagName, review);
 			tagRepo.save(newTag);
 		}
 
@@ -180,7 +180,7 @@ public class ReviewController {
 
 		} else {
 
-			addTag(tagName, null, reviewTitle);
+			addTag(tagName, reviewTitle);
 
 		}
 		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
@@ -188,7 +188,7 @@ public class ReviewController {
 
 		return "redirect:/review?id=" + reviewId;
 	}
-	
+
 	@RequestMapping("/del-tag-button")
 	public String deleteTagFromSingleReview(Long tagId, Long reviewId) {
 
@@ -197,40 +197,43 @@ public class ReviewController {
 
 		Optional<Review> reviewToUpdate = reviewRepo.findById(reviewId);
 		Review review = reviewToUpdate.get();
-		
-	
+
 		tag.deleteReview(review);
 		tagRepo.save(tag);
-
 
 		return "redirect:/review?id=" + reviewId;
 
 	}
-	
+
 	@RequestMapping("/add-comment")
 	public String addComment(String username, String commentContent, Long reviewId) {
 		Optional<Review> reviewCommented = reviewRepo.findById(reviewId);
 		Review review = reviewCommented.get();
-		
+
 		Comment comment = new Comment(username, commentContent, review);
 		commentRepo.save(comment);
 
 		return "redirect:/review?id=" + reviewId;
 	}
-	
 
 	@RequestMapping("/all-tags-ajax")
 	public String showAllTags(Model model) {
 		model.addAttribute("tags", tagRepo.findAll());
 		return "tagsAjax";
 	}
-	
-	//Ajax to add tags
-	@RequestMapping(path = "/tags/(tagName)", method = RequestMethod.POST)
-	public String AddTag(@PathVariable String tagName, Model model) {
-		
-		return "";
-	}
 
+	// Ajax to add tags
+	@RequestMapping(path = "/tags/{tagName}", method = RequestMethod.POST)
+	public String AddTag(@PathVariable String tagName, Model model) {
+		Tag tagToAdd = tagRepo.findByName(tagName);
+		if (tagToAdd == null) {
+			tagToAdd = new Tag(tagName);
+			tagRepo.save(tagToAdd);
+		}
+
+		model.addAttribute("tags", tagRepo.findAll());
+
+		return "partials/tags-list-added";
+	}
 
 }
