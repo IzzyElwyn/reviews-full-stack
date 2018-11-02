@@ -19,9 +19,59 @@
         <h2><a href="http://localhost:8080/tags">tags</a></h2>
         <div th:each="tag : ${tags}">
           <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
+          <form method = "POST">
+            <input name="reviewId" type="hidden" th:value="${review.id}" />
+            <button type="submit" th:value="${tag.id}" name="tagId" th:formaction="@{del-tag-button}"> X </button>
+          </form>
+
         </div>
+      <div>
+<form method = "POST">
+  <div>
+  <label> Add Tag to this Review </label>
+  <input type="text" name="tagName" />
+</div>
+<div>
+  <button type="submit" th:value="${review.title}" name="reviewTitle" th:formaction="@{add-tag}">add tag</button>
+</div>
+
+</form>
     </div>
+
+    <div class="comment-section">
+<form method = "POST">
+  <section>
+    <label>Username: </label>
+    <input type="text" name="username" />
+  </section>
+  <section>
+  <label> Add a comment to this review </label>
+  <input type="text" name="commentContent" />
+</section>
+<section>
+  <input type="hidden" th:value="${reviews.id}" name="reviewId"/>
+</section>
+<section>
+<button th:formaction="@{add-comment}"> submit comment </button>
+</section>
+
+</div>
+
+<div th:each="comment : ${reviews.comments}">
+
+<p><strong th:text="${comment.username}"></strong></p>
+  <p th:text="${comment.content}"></p>
+</div>
+
+
+<form method = "POST">
+  <button type="submit" th:value="${review.id}" name="reviewId" th:formaction="@{del-review}"> delete this review </button>
+</form>
+
+
   </div>
+
+
   <div class="breadcrumb">
     <a href="http://localhost:8080/reviews">Back To Home</a>
   </div>

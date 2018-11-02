@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>All Tags</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <header>
+      <h1> Tags Page </h1>
+    </header>
+
+    <div>
+      <section class="add-tag">
+        <input type="text" />
+        <button>Submit Tag</button>
+      </section>
+
+      <section class="remove-tag">
+        <input type="text" />
+        <button>Remove Tag</button>
+      </section>
+
+      <section class="tags-list">
+        <h2>Here is a list of existing tags:</h2>
+        <ul>
+          <li th:if="${tags.size() ==0}">No tags at this time... please create some!</li>
+          <li th:if="${tags.size() !=0}" th:each="tag: ${tags}">
+            <a th:href="@{/tag{id=${tag.id}}}" th:text="${tag.name}"></a>
+        </ul>
+      </section>
+    </div>
+
+
+  </div> <!-- container -->
+
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package org.wecancodeit.reviews;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -20,13 +21,15 @@ public class ReviewController {
 
 	@Resource
 	MediumRepository mediumRepo;
+	
+	@Resource
+	CommentRepository commentRepo;
 
 	@RequestMapping("/reviews")
 	public String returnAllReviews(Model model) {
 		model.addAttribute("reviews", reviewRepo.findAll());
 		return "reviews";
 	}
-
 
 	@RequestMapping("/reviews-sorted")
 	public String returnAllReviewsSorted(Model model) {
@@ -87,7 +90,138 @@ public class ReviewController {
 	public String returnAllMediums(Model model) {
 		model.addAttribute("mediums", mediumRepo.findAll());
 		return "mediums";
+
+	}
+
+	@RequestMapping("/add-review")
+	public String addReview(String reviewTitle, String img, String reviewContent,
+			String reviewRanking, String mediumType) {
+		Medium medium = mediumRepo.findByType(mediumType);
+
+		if (medium == null) {
+
+			medium = new Medium(mediumType);
+			mediumRepo.save(medium);
+		}
+
+		Review newReview = reviewRepo.getByTitle(reviewTitle);
+
+		if (newReview == null) {
+			newReview = new Review(reviewTitle, img, reviewContent, reviewRanking, medium);
+			reviewRepo.save(newReview);
+		}
+
+		return "redirect:/reviews";
+	}
+
+	@RequestMapping("/delete-review")
+	public String deleteReviewByTitle(String reviewTitle) {
+
+		if (reviewRepo.getByTitle(reviewTitle) != null) {
+			Review deletedReview = reviewRepo.getByTitle(reviewTitle);
+			reviewRepo.delete(deletedReview);
+		}
+
+		return "redirect:/reviews";
+
+	}
+
+	@RequestMapping("/del-review")
+	public String deleteReviewByReviewId(Long reviewId) {
+		Optional<Review> review = reviewRepo.findById(reviewId);
+		Review reviewToRemove = review.get();
+
+		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
 		
+		if (tagsToUpdate.size() > 0) {
+			for (Tag tag : tagsToUpdate) {
+				tag.deleteReview(reviewToRemove);
+			}
+		}
+
+		reviewRepo.deleteById(reviewId);
+
+		return "redirect:/reviews";
+	}
+
+	@RequestMapping("/find-by-tag")
+	public String findReviewsByTags(String tagName, Model model) {
+		Tag tag = tagRepo.findByName(tagName);
+		model.addAttribute("reviews", reviewRepo.findByTagsContains(tag));
+
+		return "/tag";
+	}
+
+	@RequestMapping("/new-tag")
+	public String addTag(String tagName, String tagDescription, String reviewTitle) {
+		tagName = tagName.toLowerCase();
+		Review review = reviewRepo.getByTitle(reviewTitle);
+
+		if (tagRepo.findByName(tagName) == null) {
+			Tag newTag = new Tag(tagName, tagDescription, review);
+			tagRepo.save(newTag);
+		}
+
+		return "/tags";
+
+	}
+
+	@RequestMapping("/add-tag")
+	public String addTagToReview(String tagName, String reviewTitle) {
+		tagName = tagName.toLowerCase();
+
+		if (tagRepo.findByName(tagName) != null) {
+			Tag newTag = tagRepo.findByName(tagName);
+			Review reviewTagged = reviewRepo.getByTitle(reviewTitle);
+			newTag.addReview(reviewTagged);
+			tagRepo.save(newTag);
+
+		} else {
+
+			addTag(tagName, null, reviewTitle);
+
+		}
+		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
+		long reviewId = reviewRedirect.getId();
+
+		return "redirect:/review?id=" + reviewId;
 	}
 	
+	@RequestMapping("/del-tag-button")
+	public String deleteTagFromSingleReview(Long tagId, Long reviewId) {
+
+		Optional<Tag> tagToUpdate = tagRepo.findById(tagId);
+		Tag tag = tagToUpdate.get();
+
+		Optional<Review> reviewToUpdate = reviewRepo.findById(reviewId);
+		Review review = reviewToUpdate.get();
+		
+	
+		tag.deleteReview(review);
+		tagRepo.save(tag);
+
+
+		return "redirect:/review?id=" + reviewId;
+
+	}
+	
+	@RequestMapping("/add-comment")
+	public String addComment(String username, String commentContent, Long reviewId) {
+		Optional<Review> reviewCommented = reviewRepo.findById(reviewId);
+		Review review = reviewCommented.get();
+		
+		Comment comment = new Comment(username, commentContent, review);
+		commentRepo.save(comment);
+
+		return "redirect:/review?id=" + reviewId;
+	}
+	
+	//add tags with AJAX
+	@RequestMapping("/all-tags-ajax")
+	public String showAllTags(Model model) {
+		model.addAttribute("tags", tagRepo.findAll());
+		return "tagsAjax";
+	}
+
+
 }

@@ -21,12 +21,14 @@ public class ReviewControllerTest {
 
 	@Mock
 	private Review firstReview;
+	Long reviewId;
 
 	@Mock
 	private Review secondReview;
 	
 	@Mock
 	private Tag firstTag;
+	long tagId;
 	
 	@Mock
 	private Tag secondTag;
@@ -47,7 +49,11 @@ public class ReviewControllerTest {
 	private MediumRepository mediumRepo;
 	
 	@Mock
+	private CommentRepository commentRepo;
+
+	@Mock
 	private Model model;
+
 	
 	@Before
 	public void setUp() {
@@ -109,6 +115,56 @@ public class ReviewControllerTest {
 		underTest.returnAllMediums(model);
 		verify(model).addAttribute("mediums", allMediums);
 }
-
+	
+	@Test
+	public void shouldAddAdditionalReviewsToModel() {
+		String mediumType = "tv show";
+		Medium newMedium = mediumRepo.findByType(mediumType);
+		
+		String reviewName = "new review";
+		String reviewContent = "new review Content";
+		String reviewRanking = "5 pumpkins";
+				
+		underTest.addReview(reviewName, null, reviewContent, reviewRanking,  mediumType);
+		Review newReview = new Review(reviewName, null, reviewContent, reviewRanking,  newMedium);
+		when (reviewRepo.save(newReview)).thenReturn(newReview);
+	}
+	
+	@Test
+	public void shouldBeAbleToRemoveReviewFromModelByTitle() {
+		String reviewTitle = firstReview.getTitle();
+		when(reviewRepo.getByTitle(reviewTitle)).thenReturn(firstReview);
+		underTest.deleteReviewByTitle(reviewTitle);
+		verify(reviewRepo).delete(firstReview);
+	}
+	
+	@Test
+	public void shouldRemoveReviewFromModelById() {
+		underTest.reviewRepo.deleteById(reviewId);
+		
+		verify(reviewRepo).deleteById(reviewId);
+		}
+	
+	@Test
+	public void shouldBeAbleToAddTagToModel() {
+		String tagName = "Historical";
+		String tagDescription = "Stories that take place in a historical Setting";
+		String reviewTitle = firstReview.getTitle();
+		
+		underTest.addTag(tagName, tagDescription, reviewTitle);
+		Review ascReview = reviewRepo.getByTitle(reviewTitle);
+		Tag newTag = new Tag(tagName, tagDescription, ascReview);
+		when (tagRepo.save(newTag)).thenReturn(newTag);
+		
+	}
+	
+	@Test
+	public void shouldBeAbleToRemoveTagFromModel() {
+		underTest.tagRepo.deleteById(tagId);
+		
+		verify(tagRepo).deleteById(tagId);
+		
+	}
+	
 
 }
