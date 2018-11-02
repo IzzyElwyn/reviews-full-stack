@@ -19,6 +19,11 @@
         <h2><a href="http://localhost:8080/tags">tags</a></h2>
         <div th:each="tag : ${tags}">
           <a th:href="@{/tag(id=${tag.id})}" th:text="${tag.name}"></a>
+          <form method = "POST">
+            <input name="reviewId" type="hidden" th:value="${review.id}" />
+            <button type="submit" th:value="${tag.id}" name="tagId" th:formaction="@{del-tag-button}"> X </button>
+          </form>
+
         </div>
       <div>
 <form method = "POST">
@@ -31,7 +36,6 @@
 </div>
 
 </form>
-</div>
     </div>
 
     <div class="comment-section">
@@ -63,6 +67,8 @@
 <form method = "POST">
   <button type="submit" th:value="${review.id}" name="reviewId" th:formaction="@{del-review}"> delete this review </button>
 </form>
+
+
   </div>
 
 

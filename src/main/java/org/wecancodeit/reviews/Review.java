@@ -85,6 +85,11 @@ public class Review {
 		return tags;
 	}
 	
+	public void deleteTag(Tag tag) {
+		tags.remove(tag);
+		
+	}
+	
 	public Collection<String> getTagsUrls() {
 		Collection<String> urls = new ArrayList<>();
 		for (Tag tag : tags) {
@@ -142,5 +147,6 @@ public class Review {
 			return false;
 		return true;
 	}
+
 
 }

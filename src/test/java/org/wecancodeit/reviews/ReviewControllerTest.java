@@ -28,6 +28,7 @@ public class ReviewControllerTest {
 	
 	@Mock
 	private Tag firstTag;
+	long tagId;
 	
 	@Mock
 	private Tag secondTag;
@@ -154,6 +155,14 @@ public class ReviewControllerTest {
 		Review ascReview = reviewRepo.getByTitle(reviewTitle);
 		Tag newTag = new Tag(tagName, tagDescription, ascReview);
 		when (tagRepo.save(newTag)).thenReturn(newTag);
+		
+	}
+	
+	@Test
+	public void shouldBeAbleToRemoveTagFromModel() {
+		underTest.tagRepo.deleteById(tagId);
+		
+		verify(tagRepo).deleteById(tagId);
 		
 	}
 	

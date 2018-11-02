@@ -187,6 +187,24 @@ public class ReviewController {
 		return "redirect:/review?id=" + reviewId;
 	}
 	
+	@RequestMapping("/del-tag-button")
+	public String deleteTagFromSingleReview(Long tagId, Long reviewId) {
+
+		Optional<Tag> tagToUpdate = tagRepo.findById(tagId);
+		Tag tag = tagToUpdate.get();
+
+		Optional<Review> reviewToUpdate = reviewRepo.findById(reviewId);
+		Review review = reviewToUpdate.get();
+		
+	
+		tag.deleteReview(review);
+		tagRepo.save(tag);
+
+
+		return "redirect:/review?id=" + reviewId;
+
+	}
+	
 	@RequestMapping("/add-comment")
 	public String addComment(String username, String commentContent, Long reviewId) {
 		Optional<Review> reviewCommented = reviewRepo.findById(reviewId);
@@ -196,6 +214,13 @@ public class ReviewController {
 		commentRepo.save(comment);
 
 		return "redirect:/review?id=" + reviewId;
+	}
+	
+	//add tags with AJAX
+	@RequestMapping("/all-tags-ajax")
+	public String showAllTags(Model model) {
+		model.addAttribute("tags", tagRepo.findAll());
+		return "tagsAjax";
 	}
 
 
