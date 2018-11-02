@@ -124,8 +124,8 @@ public class ReviewControllerTest {
 		String reviewContent = "new review Content";
 		String reviewRanking = "5 pumpkins";
 				
-		underTest.addReview(reviewName, null, null, reviewContent, reviewRanking,  mediumType);
-		Review newReview = new Review(reviewName, null, null, reviewContent, reviewRanking,  newMedium);
+		underTest.addReview(reviewName, null, reviewContent, reviewRanking,  mediumType);
+		Review newReview = new Review(reviewName, null, reviewContent, reviewRanking,  newMedium);
 		when (reviewRepo.save(newReview)).thenReturn(newReview);
 	}
 	

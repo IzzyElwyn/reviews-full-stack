@@ -41,7 +41,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldSaveAndLoadReview() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", medium));
+		Review review = reviewRepo.save(new Review("review","stuff", "stuff", "stuff", medium));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -55,7 +55,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldGenerateReviewId() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", "stuff", medium));
+		Review review = reviewRepo.save(new Review("review", "stuff", "stuff", "stuff", medium));
 		long reviewId = review.getId();
 		
 		entityManager.flush();
@@ -80,8 +80,8 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldEstablishTagToReviewRelationship() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", "stuff", medium));
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
+		Review haunting = reviewRepo.save(new Review("haunting", "stuff", "stuff", "stuff", medium));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
 		
 		Tag tag = new Tag("ghosts","spoops", womanInBlack, haunting);
 		tag = tagRepo.save(tag);
@@ -100,7 +100,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldFindTagsForReview() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
 		
 		Tag ghosts = tagRepo.save(new Tag("ghosts", "boo", womanInBlack));
 		Tag curses = tagRepo.save(new Tag("curses", "hard pass", womanInBlack));
@@ -116,8 +116,8 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldFindReviewsForTag() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
-		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "stuff", medium));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", medium));
 		Tag ghosts = tagRepo.save(new Tag("ghosts", "descriptions", womanInBlack, hohh));
 		
 		entityManager.flush();
@@ -147,9 +147,9 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 		mediumRepo.save(book);
 		long mediumId = book.getId();
 		
-		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", "stuff", book);
+		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", book);
 		reviewRepo.save(womanInBlack);
-		Review nos4a2 = new Review("nos4a2", "stuff", "stuff", "stuff", "stuff", book);
+		Review nos4a2 = new Review("nos4a2", "stuff", "stuff", "stuff", book);
 		reviewRepo.save(nos4a2);
 		
 		entityManager.flush();
@@ -164,8 +164,8 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldFindReviewByMedium() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", "stuff", medium));
-		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "stuff", medium));
+		Review womanInBlack = reviewRepo.save(new Review("woman in black", "stuff", "stuff", "stuff", medium));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", medium));
 		
 		entityManager.flush();
 		entityManager.clear();
@@ -178,7 +178,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldFindMediumByReview() {
 		Medium book = mediumRepo.save(new Medium("book"));
-		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "Stuff", book));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "Stuff", book));
 		
 		entityManager.flush();
 		entityManager.clear();
@@ -190,7 +190,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	@Test
 	public void shouldSaveAndLoadComment() {
 		Medium medium = mediumRepo.save(new Medium("book"));
-		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "stuff", "Stuff", medium));
+		Review hohh = reviewRepo.save(new Review("haunting of hill house", "stuff", "stuff", "Stuff", medium));
 		Comment comment = commentRepo.save(new Comment("username", "comment", hohh));
 		
 		entityManager.flush();
@@ -206,7 +206,7 @@ public class ReviewsJpaTest extends ReviewsApplicationTests{
 	public void shouldEstablishReviewtoCommentRelationship() {
 		Medium book = new Medium("book");
 		mediumRepo.save(book);
-		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", "stuff", book);
+		Review womanInBlack = new Review("woman in black", "stuff", "stuff", "stuff", book);
 		reviewRepo.save(womanInBlack);
 		Comment comment = commentRepo.save(new Comment("username", "comment", womanInBlack));
 		commentRepo.save(comment);

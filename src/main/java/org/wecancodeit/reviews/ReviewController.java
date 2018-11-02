@@ -94,7 +94,7 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/add-review")
-	public String addReview(String reviewTitle, String sqrImg, String rndImg, String reviewContent,
+	public String addReview(String reviewTitle, String img, String reviewContent,
 			String reviewRanking, String mediumType) {
 		Medium medium = mediumRepo.findByType(mediumType);
 
@@ -107,7 +107,7 @@ public class ReviewController {
 		Review newReview = reviewRepo.getByTitle(reviewTitle);
 
 		if (newReview == null) {
-			newReview = new Review(reviewTitle, sqrImg, rndImg, reviewContent, reviewRanking, medium);
+			newReview = new Review(reviewTitle, img, reviewContent, reviewRanking, medium);
 			reviewRepo.save(newReview);
 		}
 
@@ -183,6 +183,17 @@ public class ReviewController {
 		}
 		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
 		long reviewId = reviewRedirect.getId();
+
+		return "redirect:/review?id=" + reviewId;
+	}
+	
+	@RequestMapping("/add-comment")
+	public String addComment(String username, String commentContent, Long reviewId) {
+		Optional<Review> reviewCommented = reviewRepo.findById(reviewId);
+		Review review = reviewCommented.get();
+		
+		Comment comment = new Comment(username, commentContent, review);
+		commentRepo.save(comment);
 
 		return "redirect:/review?id=" + reviewId;
 	}

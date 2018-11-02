@@ -1,5 +1,8 @@
 package org.wecancodeit.reviews;
 
+import static java.lang.String.format;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Review {
 
@@ -21,19 +26,21 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String title;
-	private String sqrImg;
-	private String rndImg;
+	private String img;
 	@Lob
 	@Column
 	private String content;
 	private String ranking;
-
+	
+	@JsonIgnore
 	@ManyToOne
 	private Medium medium;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "review")
 	private Collection<Comment> comments;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "reviews")
 	private Collection<Tag> tags;
 
@@ -45,12 +52,9 @@ public class Review {
 		return title;
 	}
 
-	public String getSqrImg() {
-		return sqrImg;
-	}
 
 	public String getRndImg() {
-		return rndImg;
+		return img;
 	}
 
 	public String getContent() {
@@ -80,15 +84,30 @@ public class Review {
 	public Collection<Tag> getTags() {
 		return tags;
 	}
+	
+	public Collection<String> getTagsUrls() {
+		Collection<String> urls = new ArrayList<>();
+		for (Tag tag : tags) {
+			urls.add(format("/show-reviews/%d/tags/%s", this.getId(), tag.getName().toLowerCase()));
+			
+		}
+		
+		return urls;
+	}
+	
+	public String getMediumUrl() {
+		
+		return format("/show-reviews/%d/medium/%s", this.getId(), medium.getType().toLowerCase());
+			
+	}
 
 	public Review() {
 	}
 
-	public Review(String title, String sqrImg, String rndImg, String content, String ranking, Medium medium,
+	public Review(String title, String img, String content, String ranking, Medium medium,
 			Comment... comments) {
 		this.title = title;
-		this.sqrImg = sqrImg;
-		this.rndImg = rndImg;
+		this.img = img;
 		this.content = content;
 		this.ranking = ranking;
 		this.medium = medium;
@@ -98,8 +117,8 @@ public class Review {
 	@Override
 	public String toString() {
 		return String.format(
-				"Review[id=%d, title='%s', sqrImg='%s', rndImg='%s', content='%s', ranking='%s', medium='%s']", id,
-				title, sqrImg, rndImg, content, ranking, medium);
+				"Review[id=%d, title='%s', img='%s', content='%s', ranking='%s', medium='%s']", id,
+				title, img, content, ranking, medium);
 	}
 
 	@Override
