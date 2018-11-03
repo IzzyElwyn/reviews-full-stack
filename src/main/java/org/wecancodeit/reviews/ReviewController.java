@@ -123,11 +123,19 @@ public class ReviewController {
 		Review reviewToRemove = review.get();
 
 		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
+		
+		Collection<Comment> commentsToDelete = commentRepo.findByReview(reviewToRemove);
 
 		if (tagsToUpdate.size() > 0) {
 			for (Tag tag : tagsToUpdate) {
 				tag.deleteReview(reviewToRemove);
 			}
+			
+		if (commentsToDelete.size() > 0) {
+			for (Comment comment : commentsToDelete) {
+				commentRepo.delete(comment);
+			}
+		}
 		}
 
 		reviewRepo.deleteById(reviewId);
