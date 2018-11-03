@@ -68,12 +68,12 @@ public class ReviewController {
 
 	}
 
-	@RequestMapping("/tags")
-	public String returnAllTags(Model model) {
-		model.addAttribute("tags", tagRepo.findAll());
-		return "tags";
-
-	}
+//	@RequestMapping("/tags")
+//	public String returnAllTags(Model model) {
+//		model.addAttribute("tags", tagRepo.findAll());
+//		return "tags";
+//
+//	}
 
 	@RequestMapping("/medium")
 	public String returnOneMedium(@RequestParam(value = "id") long id, Model model) throws MediumNotFoundException {
@@ -116,17 +116,6 @@ public class ReviewController {
 		return "redirect:/reviews";
 	}
 
-	@RequestMapping("/delete-review")
-	public String deleteReviewByTitle(String reviewTitle) {
-
-		if (reviewRepo.getByTitle(reviewTitle) != null) {
-			Review deletedReview = reviewRepo.getByTitle(reviewTitle);
-			reviewRepo.delete(deletedReview);
-		}
-
-		return "redirect:/reviews";
-
-	}
 
 	@RequestMapping("/del-review")
 	public String deleteReviewByReviewId(Long reviewId) {
@@ -147,11 +136,18 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/find-by-tag")
-	public String findReviewsByTags(String tagName, Model model) {
+	public String findReviewsByTags(String tagName, Model model) throws TagNotFoundException {
+		
 		Tag tag = tagRepo.findByName(tagName);
+		
+		if (tag != null) {
 		model.addAttribute("reviews", reviewRepo.findByTagsContains(tag));
 
 		return "/tag";
+		} else {
+			
+			throw new TagNotFoundException();
+		}
 	}
 
 	@RequestMapping("/new-tag")
@@ -225,7 +221,7 @@ public class ReviewController {
 	// Ajax to add tags
 	@RequestMapping(path = "/tags/{tagName}", method = RequestMethod.POST)
 	public String AddTag(@PathVariable String tagName, Model model) {
-		Tag tagToAdd = tagRepo.findByName(tagName);
+		Tag tagToAdd = tagRepo.findByName(tagName.toLowerCase());
 		if (tagToAdd == null) {
 			tagToAdd = new Tag(tagName);
 			tagRepo.save(tagToAdd);
@@ -234,6 +230,19 @@ public class ReviewController {
 		model.addAttribute("tags", tagRepo.findAll());
 
 		return "partials/tags-list-added";
+	}
+	
+	//Ajax to remove tag - I left the method as delete for the sake of semantics 
+	@RequestMapping(path = "/tags/{tagName}", method = RequestMethod.DELETE)
+	public String RemoveTag(@PathVariable String tagName, Model model) {
+		Tag tagToRemove = tagRepo.findByName(tagName.toLowerCase());
+		if (tagToRemove != null) {
+			tagRepo.delete(tagToRemove);
+		}
+		
+		model.addAttribute("tags", tagRepo.findAll());
+		return "partials/tags-list-removed";
+		
 	}
 
 }

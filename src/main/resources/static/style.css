@@ -2,19 +2,20 @@
   margin: 0;
   background: black;
   color: white;
+  padding: 0;
   background-attachment: fixed;
   text-align: center;
 }
 
 h1 {
-  text-align: center;
   padding-top: 1%;
   font-family: "Creepster", sans-serif;
 }
 
-.menu {
-  text-align: center;
+li {
+  list-style: none;
 }
+
 
 .menu h1 {
   color: red;
@@ -24,7 +25,6 @@ h1 {
 
 p {
   color: white;
-  text-align: center;
   padding: .5%;
 }
 
@@ -44,17 +44,22 @@ img {
 
 #content {
   color: white;
-  text-align: center;
   padding: 2%;
 }
 
 #rate {
   color: white;
-  text-align: center;
   padding: 1%;
 }
 
+.find-by-tag {
+  padding: 5%;
+}
+
+.add-review {
+  padding: 5%;
+}
+
 .breadcrumb {
-  text-align: center;
   padding: 5%;
 }

@@ -5,6 +5,8 @@
 
   <meta charset="utf-8">
   <title>All Tags</title>
+  <link href="/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Creepster" rel="stylesheet">
 </head>
 
 <body>
@@ -15,6 +17,18 @@
     </header>
 
     <div>
+
+      <section class="tags-list">
+        <h2>Here is a list of existing tags:</h2>
+        <ul>
+          <li th:if="${tags.size() ==0}">No tags at this time... please create some!</li>
+          <li th:if="${tags.size() !=0}" th:each="tag: ${tags}">
+           <a th:href="${'/tag?id=' + tag.id}" th:text="${tag.name}"></a>
+        </ul>
+      </section>
+    </div>
+
+    <div class="tag-buttons">
       <section class="add-tag">
         <input type="text" />
         <button>Submit Tag</button>
@@ -24,17 +38,11 @@
         <input type="text" />
         <button>Remove Tag</button>
       </section>
-
-      <section class="tags-list">
-        <h2>Here is a list of existing tags:</h2>
-        <ul>
-          <li th:if="${tags.size() ==0}">No tags at this time... please create some!</li>
-          <li th:if="${tags.size() !=0}" th:each="tag: ${tags}">
-            <a th:href="@{/tag{id=${tag.id}}}" th:text="${tag.name}"></a>
-        </ul>
-      </section>
     </div>
 
+    <div class="breadcrumb">
+      <a href="http://localhost:8080/reviews">Back To Home</a>
+    </div>
 
   </div> <!-- container -->
 
