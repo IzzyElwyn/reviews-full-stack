@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+  <title>Horror Reviews</title>
+  <link href="/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Caveat+Brush|Creepster" rel="stylesheet">
+</head>
+<body>
+<h3>Tag added!</h3>
+<h4>Available Tags are now...</h4>
+
+<li th:each="tag : ${tags}">
+  <a th:href="${'/tag?id=' + tag.id}" th:text="${tag.name}"></a>
+</li>
+</body>
+</html>

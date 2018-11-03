@@ -88,12 +88,12 @@ public class ReviewControllerTest {
 		verify(model).addAttribute("tags", firstTag);
 	}
 	
-	@Test
+	@Test 
 	public void shouldAddAllTagsToModel() {
 		Collection<Tag> allTags = asList(firstTag, secondTag);
 		when(tagRepo.findAll()).thenReturn(allTags);
 		
-		underTest.returnAllTags(model);
+		underTest.showAllTags(model);
 		verify(model).addAttribute("tags", allTags);
 		
 	}
@@ -130,13 +130,6 @@ public class ReviewControllerTest {
 		when (reviewRepo.save(newReview)).thenReturn(newReview);
 	}
 	
-	@Test
-	public void shouldBeAbleToRemoveReviewFromModelByTitle() {
-		String reviewTitle = firstReview.getTitle();
-		when(reviewRepo.getByTitle(reviewTitle)).thenReturn(firstReview);
-		underTest.deleteReviewByTitle(reviewTitle);
-		verify(reviewRepo).delete(firstReview);
-	}
 	
 	@Test
 	public void shouldRemoveReviewFromModelById() {
@@ -148,12 +141,11 @@ public class ReviewControllerTest {
 	@Test
 	public void shouldBeAbleToAddTagToModel() {
 		String tagName = "Historical";
-		String tagDescription = "Stories that take place in a historical Setting";
 		String reviewTitle = firstReview.getTitle();
 		
-		underTest.addTag(tagName, tagDescription, reviewTitle);
+		underTest.addTag(tagName,reviewTitle);
 		Review ascReview = reviewRepo.getByTitle(reviewTitle);
-		Tag newTag = new Tag(tagName, tagDescription, ascReview);
+		Tag newTag = new Tag(tagName, ascReview);
 		when (tagRepo.save(newTag)).thenReturn(newTag);
 		
 	}

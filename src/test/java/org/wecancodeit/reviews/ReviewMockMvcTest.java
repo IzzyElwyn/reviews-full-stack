@@ -92,14 +92,14 @@ public class ReviewMockMvcTest {
 
 	@Test
 	public void shouldRouteToAllTagsView() throws Exception {
-		mvc.perform(get("/tags")).andExpect(view().name(is("tags")));
+		mvc.perform(get("/all-tags-ajax")).andExpect(view().name(is("tagsAjax")));
 	}
 
 	@Test
 	public void shouldPutTagsIntoModel() throws Exception {
 		Collection<Tag> allTags = asList(firstTag, secondTag);
 		when(tagRepo.findAll()).thenReturn(allTags);
-		mvc.perform(get("/tags")).andExpect(model().attribute("tags", is(allTags)));
+		mvc.perform(get("/all-tags-ajax")).andExpect(model().attribute("tags", is(allTags)));
 	}
 
 	@Test

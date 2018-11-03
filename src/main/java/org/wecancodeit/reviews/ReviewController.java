@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -21,7 +23,7 @@ public class ReviewController {
 
 	@Resource
 	MediumRepository mediumRepo;
-	
+
 	@Resource
 	CommentRepository commentRepo;
 
@@ -66,12 +68,12 @@ public class ReviewController {
 
 	}
 
-	@RequestMapping("/tags")
-	public String returnAllTags(Model model) {
-		model.addAttribute("tags", tagRepo.findAll());
-		return "tags";
-
-	}
+//	@RequestMapping("/tags")
+//	public String returnAllTags(Model model) {
+//		model.addAttribute("tags", tagRepo.findAll());
+//		return "tags";
+//
+//	}
 
 	@RequestMapping("/medium")
 	public String returnOneMedium(@RequestParam(value = "id") long id, Model model) throws MediumNotFoundException {
@@ -94,8 +96,8 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/add-review")
-	public String addReview(String reviewTitle, String img, String reviewContent,
-			String reviewRanking, String mediumType) {
+	public String addReview(String reviewTitle, String img, String reviewContent, String reviewRanking,
+			String mediumType) {
 		Medium medium = mediumRepo.findByType(mediumType);
 
 		if (medium == null) {
@@ -114,17 +116,6 @@ public class ReviewController {
 		return "redirect:/reviews";
 	}
 
-	@RequestMapping("/delete-review")
-	public String deleteReviewByTitle(String reviewTitle) {
-
-		if (reviewRepo.getByTitle(reviewTitle) != null) {
-			Review deletedReview = reviewRepo.getByTitle(reviewTitle);
-			reviewRepo.delete(deletedReview);
-		}
-
-		return "redirect:/reviews";
-
-	}
 
 	@RequestMapping("/del-review")
 	public String deleteReviewByReviewId(Long reviewId) {
@@ -132,7 +123,7 @@ public class ReviewController {
 		Review reviewToRemove = review.get();
 
 		Collection<Tag> tagsToUpdate = tagRepo.findByReviewsContains(reviewToRemove);
-		
+
 		if (tagsToUpdate.size() > 0) {
 			for (Tag tag : tagsToUpdate) {
 				tag.deleteReview(reviewToRemove);
@@ -145,20 +136,27 @@ public class ReviewController {
 	}
 
 	@RequestMapping("/find-by-tag")
-	public String findReviewsByTags(String tagName, Model model) {
+	public String findReviewsByTags(String tagName, Model model) throws TagNotFoundException {
+		
 		Tag tag = tagRepo.findByName(tagName);
+		
+		if (tag != null) {
 		model.addAttribute("reviews", reviewRepo.findByTagsContains(tag));
 
 		return "/tag";
+		} else {
+			
+			throw new TagNotFoundException();
+		}
 	}
 
 	@RequestMapping("/new-tag")
-	public String addTag(String tagName, String tagDescription, String reviewTitle) {
+	public String addTag(String tagName, String reviewTitle) {
 		tagName = tagName.toLowerCase();
 		Review review = reviewRepo.getByTitle(reviewTitle);
 
 		if (tagRepo.findByName(tagName) == null) {
-			Tag newTag = new Tag(tagName, tagDescription, review);
+			Tag newTag = new Tag(tagName, review);
 			tagRepo.save(newTag);
 		}
 
@@ -178,7 +176,7 @@ public class ReviewController {
 
 		} else {
 
-			addTag(tagName, null, reviewTitle);
+			addTag(tagName, reviewTitle);
 
 		}
 		Review reviewRedirect = reviewRepo.getByTitle(reviewTitle);
@@ -186,7 +184,7 @@ public class ReviewController {
 
 		return "redirect:/review?id=" + reviewId;
 	}
-	
+
 	@RequestMapping("/del-tag-button")
 	public String deleteTagFromSingleReview(Long tagId, Long reviewId) {
 
@@ -195,33 +193,56 @@ public class ReviewController {
 
 		Optional<Review> reviewToUpdate = reviewRepo.findById(reviewId);
 		Review review = reviewToUpdate.get();
-		
-	
+
 		tag.deleteReview(review);
 		tagRepo.save(tag);
-
 
 		return "redirect:/review?id=" + reviewId;
 
 	}
-	
+
 	@RequestMapping("/add-comment")
 	public String addComment(String username, String commentContent, Long reviewId) {
 		Optional<Review> reviewCommented = reviewRepo.findById(reviewId);
 		Review review = reviewCommented.get();
-		
+
 		Comment comment = new Comment(username, commentContent, review);
 		commentRepo.save(comment);
 
 		return "redirect:/review?id=" + reviewId;
 	}
-	
-	//add tags with AJAX
+
 	@RequestMapping("/all-tags-ajax")
 	public String showAllTags(Model model) {
 		model.addAttribute("tags", tagRepo.findAll());
 		return "tagsAjax";
 	}
 
+	// Ajax to add tags
+	@RequestMapping(path = "/tags/{tagName}", method = RequestMethod.POST)
+	public String AddTag(@PathVariable String tagName, Model model) {
+		Tag tagToAdd = tagRepo.findByName(tagName.toLowerCase());
+		if (tagToAdd == null) {
+			tagToAdd = new Tag(tagName);
+			tagRepo.save(tagToAdd);
+		}
+
+		model.addAttribute("tags", tagRepo.findAll());
+
+		return "partials/tags-list-added";
+	}
+	
+	//Ajax to remove tag - I left the method as delete for the sake of semantics 
+	@RequestMapping(path = "/tags/{tagName}", method = RequestMethod.DELETE)
+	public String RemoveTag(@PathVariable String tagName, Model model) {
+		Tag tagToRemove = tagRepo.findByName(tagName.toLowerCase());
+		if (tagToRemove != null) {
+			tagRepo.delete(tagToRemove);
+		}
+		
+		model.addAttribute("tags", tagRepo.findAll());
+		return "partials/tags-list-removed";
+		
+	}
 
 }
